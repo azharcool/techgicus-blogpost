@@ -5,25 +5,25 @@ import { Routes, Route } from "react-router-dom";
 import Home from "./components/Home";
 import About from "./components/About";
 import NotFound from "./components/NotFound";
+import Layout from "./layouts/Layout";
+import Post from './components/posts/Post';
+import AddPost from './components/posts/AddPost';
 
+// /route-name
 function App() {
   return (
-    <div className="App">
-      <div style={{ height: 50, background: "red" }}></div>
-      <Header title="Techgicus Blogpost" />
-      <Nav />
-
-      <div style={{
-        height: 1000
-      }}>
-      </div>
-      <Routes>
-        <Route path="/" element={<Home />} />
+    <Routes>
+      <Route path="/" element={<Layout />}>
+        {/* Public Routes */}
+        <Route index={true} element={<Home />} />
         <Route path="/about" element={<About />} />
+        <Route path="/post/:id" element={<Post />} />
+        <Route path="/add-post" element={<AddPost />} />
+
+        {/* Catch all Routes - Not found Routes */}
         <Route path="*" element={<NotFound />} />
-      </Routes>
-      <Footer />
-    </div>
+      </Route>
+    </Routes>
   );
 }
 
