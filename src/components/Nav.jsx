@@ -3,13 +3,65 @@ import styled from "styled-components";
 
 const StyledUl = styled.ul`
   display: flex;
+
+  li {
+    padding: 1rem;
+  }
+
+  li a {
+    color: lightgreen;
+    font-size: 1.5rem;
+    opacity: 0.6;
+  }
+
+  li a:hover {
+    opacity: 1;
+  }
+
+  li a:active {
+    opacity: 1;
+  }
 `;
 
-function Nav() {
+const StyledNav = styled.nav`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+
+  form {
+    width: 100%;
+    max-width: 80%;
+    padding: 1rem 0 0 0.75rem;
+  }
+
+  form input[type="text"] {
+    width: 100%;
+    min-height: 48px;
+    outline: none;
+    border: none;
+    background-color: #ccc;
+    padding: 5px;
+    border-radius: 5px;
+    color: black;
+  }
+`;
+
+function Nav(props) {
+  const { search, setSearch } = props;
   return (
-    <nav>
+    <StyledNav>
       <form>
-        <input type="text" placeholder="search post.." />
+        <input
+          type="text"
+          placeholder="search post.."
+          value={search}
+          onChange={(e) => {
+            const { value } = e.target;
+            setSearch(value);
+          }}
+        />
       </form>
 
       <StyledUl>
@@ -29,7 +81,7 @@ function Nav() {
           <a href="/contact-us">Contact Us</a>
         </li>
       </StyledUl>
-    </nav>
+    </StyledNav>
   );
 }
 

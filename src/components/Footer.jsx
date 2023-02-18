@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { Container } from "./styled/global.styled";
 
 const Wrapper = styled.footer`
   height: 6rem;
@@ -7,9 +8,10 @@ const Wrapper = styled.footer`
 
   display: flex;
   align-items: center;
-  padding-left: 1.5rem;
+  /* padding-left: 1.5rem; */
 
-  position: absolute;
+  position: fixed;
+  border-top: 1px solid rgba(204, 204, 204, 0.303);
   width: 100%;
   bottom: 0;
 `;
@@ -22,7 +24,9 @@ const StyledP = styled.p`
 function Footer() {
   return (
     <Wrapper>
-      <StyledP>Copyright &copy; {new Date().getFullYear()}</StyledP>
+      <Container isCenter>
+        <StyledP>Copyright &copy; {new Date().getFullYear()}</StyledP>
+      </Container>
     </Wrapper>
   );
 }
