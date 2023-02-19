@@ -12,7 +12,7 @@ function Layout(props) {
       <Header title="Techgicus Blogpost" />
 
       <Container isMarginB>
-        <Nav {...props} />
+        <Nav />
 
         {/*All Routing*/}
         <Outlet />

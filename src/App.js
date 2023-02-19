@@ -25,7 +25,7 @@ const initialState = {
   },
 };
 
-const actionTypes = {
+export const actionTypes = {
   search: "ADD_SEARCH",
   postForm: "ADD_POST_FORM",
   addPost: "ADD_POST",
@@ -39,7 +39,7 @@ const actionTypes = {
 const reducer = (state, action) => {
   console.log(action);
   switch (action.type) {
-    case "ADD_SEARCH": {
+    case actionTypes.addPost: {
       return {
         ...state,
         search: action.payload || "",
@@ -76,31 +76,7 @@ function App() {
 
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  console.log({ state });
-
-  const handleAddPost = (e) => {
-    e.preventDefault();
-
-    const currentDate = new Date();
-
-    const formattedDate = new Intl.DateTimeFormat("en-US", {
-      day: "2-digit",
-      month: "long",
-      year: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-      second: "2-digit",
-    }).format(currentDate);
-
-    // const temp = {
-    //   id: posts.length + 1,
-    //   ...postForm,
-    //   date: formattedDate,
-    // };
-
-    // setPosts([...posts, temp]);
-    // navigate("/");
-  };
+ 
 
   const handleDelete = (id) => {
     const newPost = posts.filter((i) => i.id !== Number(id));
@@ -110,10 +86,7 @@ function App() {
 
   return (
     <Routes>
-      <Route
-        path="/"
-        element={<Layout search={state.search} dispatch={dispatch} />}
-      >
+      <Route path="/" element={<Layout />}>
         {/* post data */}
         <Route
           index={true}

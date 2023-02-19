@@ -1,5 +1,9 @@
 import React from "react";
 import styled from "styled-components";
+import { addSearch } from "../redux/postSlice";
+import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
+
 
 const StyledUl = styled.ul`
   display: flex;
@@ -49,14 +53,13 @@ const StyledNav = styled.nav`
 `;
 
 function Nav(props) {
-  const { search, dispatch } = props;
+  const search = useSelector((state) => state.postsReducer.search);
+  console.log(search);
+  const dispatch = useDispatch();
 
   const handleOnChange = (e) => {
     const { value } = e.target;
-    dispatch({
-      type: "ADD_SEARCH",
-      payload: value,
-    });
+    dispatch(addSearch(value));
   };
 
   return (
