@@ -49,7 +49,16 @@ const StyledNav = styled.nav`
 `;
 
 function Nav(props) {
-  const { search, setSearch } = props;
+  const { search, dispatch } = props;
+
+  const handleOnChange = (e) => {
+    const { value } = e.target;
+    dispatch({
+      type: "ADD_SEARCH",
+      payload: value,
+    });
+  };
+
   return (
     <StyledNav>
       <form>
@@ -57,10 +66,7 @@ function Nav(props) {
           type="text"
           placeholder="search post.."
           value={search}
-          onChange={(e) => {
-            const { value } = e.target;
-            setSearch(value);
-          }}
+          onChange={handleOnChange}
         />
       </form>
 

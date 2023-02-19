@@ -1,8 +1,6 @@
 import React from "react";
 import styled from "styled-components";
 
-
-
 const Card = styled.div`
   padding: 2rem;
   border: 1px solid #cccccc2b;
@@ -25,20 +23,24 @@ const Card = styled.div`
   }
 `;
 function Home(props) {
-  const {posts} = props;
+  const { posts } = props;
   return (
     <main>
-      {posts.map((post) => {
-        return (
-          <Card key={post.id}>
-            <h2>
-              <a href={`post/${post.id}`}> {post.title}</a>
-            </h2>
-            <p className="date">{post.date}</p>
-            <p>{post.description}</p>
-          </Card>
-        );
-      })}
+      {posts.length ? (
+        posts.map((post) => {
+          return (
+            <Card key={post.id}>
+              <h2>
+                <a href={`post/${post.id}`}> {post.title}</a>
+              </h2>
+              <p className="date">{post.date}</p>
+              <p>{post.description}</p>
+            </Card>
+          );
+        })
+      ) : (
+        <p>No data Found!</p>
+      )}
     </main>
   );
 }

@@ -8,50 +8,75 @@ import NotFound from "./components/NotFound";
 import Layout from "./layouts/Layout";
 import Post from "./components/posts/Post";
 import AddPost from "./components/posts/AddPost";
-import { useState } from "react";
+import { useReducer, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const data = [
-  {
-    id: 1,
-    title: "Post 1",
-    description: `Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ratione temporibus perspiciatis iure sit animi sapiente asperiores. Ex sint illo quas. Quasi labore beatae cum quia obcaecati a sunt! Quam atque at veritatis, officiis illo, eligendi, nihil non quae reprehenderit in molestias sint recusandae. At, pariatur?`,
-    date: "July 01, 2021 11:17:36 AM",
+// array of object store, array of number| string| boolean -> []
+// string  => ""
+// boolean -> true | false
+// number -> 0 | -1 undefined | null
+
+const initialState = {
+  posts: [],
+  search: "",
+  postForm: {
+    title: "",
+    description: "",
   },
-  {
-    id: 2,
-    title: "Post 2",
-    description: `Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ratione temporibus perspiciatis iure sit animi sapiente asperiores. Ex sint illo quas. Quasi labore beatae cum quia obcaecati a sunt! Quam atque at veritatis, officiis illo, eligendi, nihil non quae reprehenderit in molestias sint recusandae. At, pariatur?`,
-    date: "July 01, 2021 11:17:36 AM",
-  },
-  {
-    id: 3,
-    title: "Post 3",
-    description: `Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ratione temporibus perspiciatis iure sit animi sapiente asperiores. Ex sint illo quas. Quasi labore beatae cum quia obcaecati a sunt! Quam atque at veritatis, officiis illo, eligendi, nihil non quae reprehenderit in molestias sint recusandae. At, pariatur?`,
-    date: "July 01, 2021 11:17:36 AM",
-  },
-  {
-    id: 4,
-    title: "Post 4",
-    description: `Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ratione temporibus perspiciatis iure sit animi sapiente asperiores. Ex sint illo quas. Quasi labore beatae cum quia obcaecati a sunt! Quam atque at veritatis, officiis illo, eligendi, nihil non quae reprehenderit in molestias sint recusandae. At, pariatur?`,
-    date: "July 01, 2021 11:17:36 AM",
-  },
-  {
-    id: 5,
-    title: "Post 5",
-    description: `Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ratione temporibus perspiciatis iure sit animi sapiente asperiores. Ex sint illo quas. Quasi labore beatae cum quia obcaecati a sunt! Quam atque at veritatis, officiis illo, eligendi, nihil non quae reprehenderit in molestias sint recusandae. At, pariatur?`,
-    date: "July 01, 2021 11:17:36 AM",
-  },
-];
+};
+
+const actionTypes = {
+  search: "ADD_SEARCH",
+  postForm: "ADD_POST_FORM",
+  addPost: "ADD_POST",
+  removePost: "REMOVE_POST",
+};
+
+// action -> type, payload
+// type -> action type (update, edit, remove, add )
+// payload -> data
+
+const reducer = (state, action) => {
+  console.log(action);
+  switch (action.type) {
+    case "ADD_SEARCH": {
+      return {
+        ...state,
+        search: action.payload || "",
+      };
+    }
+
+    case "ADD_POST_FORM": {
+      return {
+        ...state,
+        postForm: {
+          ...state.postForm,
+          [action.payload.name]: action.payload.value,
+        },
+      };
+    }
+
+    case "ADD_POST": {
+      const newPost = [...state.posts, action.payload];
+
+      return {
+        ...state,
+        posts: newPost,
+      };
+    }
+
+    default:
+      return state;
+  }
+};
 
 function App() {
   const navigate = useNavigate();
-  const [posts, setPosts] = useState(data);
-  const [search, setSearch] = useState("");
-  const [postForm, setPostForm] = useState({
-    title: "",
-    description: "",
-  });
+  const [posts, setPosts] = useState();
+
+  const [state, dispatch] = useReducer(reducer, initialState);
+
+  console.log({ state });
 
   const handleAddPost = (e) => {
     e.preventDefault();
@@ -67,14 +92,14 @@ function App() {
       second: "2-digit",
     }).format(currentDate);
 
-    const temp = {
-      id: posts.length + 1,
-      ...postForm,
-      date: formattedDate,
-    };
+    // const temp = {
+    //   id: posts.length + 1,
+    //   ...postForm,
+    //   date: formattedDate,
+    // };
 
-    setPosts([...posts, temp]);
-    navigate("/");
+    // setPosts([...posts, temp]);
+    // navigate("/");
   };
 
   const handleDelete = (id) => {
@@ -87,16 +112,16 @@ function App() {
     <Routes>
       <Route
         path="/"
-        element={<Layout search={search} setSearch={setSearch} />}
+        element={<Layout search={state.search} dispatch={dispatch} />}
       >
         {/* post data */}
         <Route
           index={true}
           element={
             <Home
-              posts={posts
+              posts={state.posts
                 .filter((i) =>
-                  i.title.toLowerCase().includes(search.toLowerCase())
+                  i.title.toLowerCase().includes(state.search.toLowerCase())
                 )
                 .reverse()}
             />
@@ -108,7 +133,7 @@ function App() {
         {/* post item detail */}
         <Route
           path="/post/:id"
-          element={<Post posts={posts} handleDelete={handleDelete} />}
+          element={<Post posts={state.posts} handleDelete={handleDelete} />}
         />
 
         {/* add post handler */}
@@ -116,9 +141,10 @@ function App() {
           path="/add-post"
           element={
             <AddPost
-              postForm={postForm}
-              setPostForm={setPostForm}
-              handleAddPost={handleAddPost}
+              postForm={state.postForm}
+              dispatch={dispatch}
+              // setPostForm={setPostForm}
+              // handleAddPost={handleAddPost}
             />
           }
         />

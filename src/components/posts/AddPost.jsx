@@ -1,5 +1,7 @@
 import React from "react";
 import styled, { css } from "styled-components";
+import { format } from "date-fns";
+import { useNavigate } from "react-router-dom";
 
 const PostWrapper = styled.main`
   h2 {
@@ -69,14 +71,36 @@ const ButtonWrapper = styled.div`
 `;
 
 function AddPost(props) {
-  const { postForm, setPostForm, handleAddPost } = props;
+  const { postForm, dispatch } = props;
+  const navigate = useNavigate();
 
   const handleOnChange = (e) => {
     const { name, value } = e.target;
-    setPostForm((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+
+    dispatch({
+      type: "ADD_POST_FORM",
+      payload: {
+        name,
+        value,
+      },
+    });
+  };
+
+  const handleAddPost = (e) => {
+    e.preventDefault();
+
+    const temp = {
+      id: crypto.randomUUID(),
+      ...postForm,
+      date: format(new Date(), "MMMM dd, yyyy HH:MM:SS aa"),
+    };
+
+    dispatch({
+      type: "ADD_POST",
+      payload: temp,
+    });
+
+    navigate("/");
   };
 
   const isDisabled = Boolean(postForm.title && postForm.description);
