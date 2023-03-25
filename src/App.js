@@ -76,8 +76,6 @@ function App() {
 
   const [state, dispatch] = useReducer(reducer, initialState);
 
- 
-
   const handleDelete = (id) => {
     const newPost = posts.filter((i) => i.id !== Number(id));
     setPosts(newPost);
@@ -88,18 +86,7 @@ function App() {
     <Routes>
       <Route path="/" element={<Layout />}>
         {/* post data */}
-        <Route
-          index={true}
-          element={
-            <Home
-              posts={state.posts
-                .filter((i) =>
-                  i.title.toLowerCase().includes(state.search.toLowerCase())
-                )
-                .reverse()}
-            />
-          }
-        />
+        <Route index={true} element={<Home />} />
 
         <Route path="/about" element={<About />} />
 

@@ -2,6 +2,7 @@ import React from "react";
 import styled, { css } from "styled-components";
 import { format } from "date-fns";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const PostWrapper = styled.main`
   h2 {
@@ -74,6 +75,46 @@ function AddPost(props) {
   const { postForm, dispatch } = props;
   const navigate = useNavigate();
 
+  const addNewPost = async () => {
+    try {
+      const response = await axios.post(
+        "https://jsonplaceholder.typicode.com/users",
+        {
+          name: "mock",
+          phone: "1-770-736-8031 x56442",
+          username: "mocktest",
+          website: "mock.org",
+          email: "Sincere@april.biz",
+          address: {
+            street: "mock address Light",
+            suite: "Apt. 556",
+            city: "Gwenborough",
+            zipcode: "92998-3874",
+            geo: {
+              lat: "-37.3159",
+              lng: "81.1496",
+            },
+          },
+          company: {
+            name: "Romaguera-Crona",
+            catchPhrase: "Multi-layered client-server neural-net",
+            bs: "harness real-time e-markets",
+          },
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      if (response) {
+        console.log("response", response);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const handleOnChange = (e) => {
     const { name, value } = e.target;
 
@@ -99,8 +140,7 @@ function AddPost(props) {
       type: "ADD_POST",
       payload: temp,
     });
-
-    navigate("/");
+    addNewPost();
   };
 
   const isDisabled = Boolean(postForm.title && postForm.description);
@@ -136,8 +176,8 @@ function AddPost(props) {
           <p></p>
         </FormGroup>
 
-        <ButtonWrapper disabled={!isDisabled}>
-          <button disabled={!isDisabled}>Add Post</button>
+        <ButtonWrapper>
+          <button>Add Post</button>
         </ButtonWrapper>
       </form>
     </PostWrapper>

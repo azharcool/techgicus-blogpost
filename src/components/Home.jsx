@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import axios from "axios";
 
 const Card = styled.div`
   padding: 2rem;
@@ -23,7 +24,28 @@ const Card = styled.div`
   }
 `;
 function Home(props) {
-  const { posts } = props;
+  // const { posts } = props;
+  const [posts, setPosts] = useState([]);
+
+  useEffect(() => {
+    getUser();
+  }, []);
+
+  const getUser = () => {
+    axios
+      .get("https://jsonplaceholder.typicode.com/users")
+      .then((response) => {
+        console.log("response ", response.data);
+        setPosts(response.data);
+      })
+      .catch((err) => {
+        console.log("error ", err);
+      })
+      .finally(() => {
+        console.log("user api called");
+      });
+  };
+
   return (
     <main>
       {posts.length ? (
@@ -31,10 +53,14 @@ function Home(props) {
           return (
             <Card key={post.id}>
               <h2>
-                <a href={`post/${post.id}`}> {post.title}</a>
+                <a href={`post/${post.id}`}> {post.name}</a>
               </h2>
-              <p className="date">{post.date}</p>
-              <p>{post.description}</p>
+              <p className="date">{post.username}</p>
+              <address>
+                {post.address.city}, <br />
+                {post.address.street}, {post.address.suite}{" "}
+                {post.address.zipcode}
+              </address>
             </Card>
           );
         })
